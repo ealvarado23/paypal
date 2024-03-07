@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assigment</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <style>
+      .blue-rectangle {
+        width: 150px;
+        height: 150px;
+        background-color: #00ffff;
+      }
+      #droppable {
+        width: 300px;
+        height: 300px;
+        background: #fff;
+        border: 2px solid #ff0000;
+      }
+      #name {
+        display: inline-block;
+      }
+      #slidingDiv {
+        width: 200px;
+        height: 100px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        overflow: hidden;
+        transition: margin-left 0.5s ease-in-out;
+      }
+
+      #slidingDiv header {
+        padding: 10px;
+        background-color: #ddd;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>jQuery</h1>
+      <hr />
+      <div class="div1">
+        <p>Click the button and show text with sliding or fading animation</p>
+        <button class="button1">Slide Up and Down</button>
+        <div class="text1">
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa sint
+          alias omnis, quae necessitatibus corrupti harum, fuga ex, illo
+          eligendi facilis magnam eos ut nemo reprehenderit consequatur delectus
+          eius cum?
+        </div>
+      </div>
+
+      <hr />
+      <div class="div2">
+        <p>Radio button and show text with a sliding or fading animation</p>
+
+        <form>
+          <input type="radio" id="apple" name="fruit" value="apple" />
+          <label for="apple">Apple</label><br />
+
+          <input type="radio" id="banana" name="fruit" value="banana" />
+          <label for="banana">Banana</label><br />
+
+          <input type="radio" id="orange" name="fruit" value="orange" />
+          <label for="orange">Orange</label><br />
+
+          <input type="radio" id="strawberry" name="fruit" value="strawberry" />
+          <label for="strawberry">Strawberry</label><br />
+        </form>
+      </div>
+
+      <hr />
+      <div class="div3">
+        <p>
+          Drag an object from one place to another, when placed at another
+          hotspot show text with sliding or fading animation
+        </p>
+        <div class="text2">
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa sint
+          alias omnis, quae necessitatibus corrupti harum, fuga ex, illo
+          eligendi facilis magnam eos ut nemo reprehenderit consequatur delectus
+          eius cum?
+        </div>
+        <div class="blue-rectangle">Drag me in and out</div>
+        <br />
+        <div id="droppable">
+          <p>Drop here</p>
+        </div>
+      </div>
+      <hr />
+      <div class="div4">
+        <p>
+          Write text in a Fill in the blank and show text with sliding or fading
+          animation
+        </p>
+        <button onclick="typeWriter()">Write</button>
+        <div>
+          <span class="typewriter">
+            Please enter your name:
+            <p id="name"></p>
+            In order to see the effect.
+          </span>
+        </div>
+      </div>
+      <div class="div5">
+        <div id="slidingDiv">
+          <header>Click me to slide</header>
+          <div>
+            <!-- Contenido del div deslizante -->
+            <p>Contenido del div deslizante</p>
+          </div>
+        </div>
+      </div>
+      <!-- end -->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script
+      src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"
+      integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $(".button1").click(function () {
+          $(".text1").slideToggle();
+        });
+      });
+
+      $(document).ready(function () {
+        $("input[type='radio']").click(function () {
+          $(this).fadeOut();
+          $("label[for='" + $(this).attr("id") + "']").fadeOut();
+        });
+      });
+
+      $(document).ready(function () {
+        $(".text2").hide();
+      });
+
+      $(function () {
+        $(".blue-rectangle").draggable();
+        $("#droppable").droppable({
+          drop: function (event, ui) {
+            $(".text2").fadeIn();
+          },
+          out: function (event, ui) {
+            $(".text2").hide();
+          },
+        });
+      });
+
+      var i = 0;
+      var txt = "Esteban" + ".";
+      var speed = 50;
+
+      function typeWriter() {
+        if (i < txt.length) {
+          document.getElementById("name").innerHTML += txt.charAt(i);
+          i++;
+          setTimeout(typeWriter, speed);
+        }
+      }
+
+      $(document).ready(function () {
+        var slidingDiv = $("#slidingDiv");
+        slidingDiv.find("header").click(function () {
+          slidingDiv.toggleClass("open");
+          slidingDiv.stop().animate(
+            {
+              marginLeft: slidingDiv.hasClass("open")
+                ? 0
+                : -slidingDiv.outerWidth(),
+            },
+            500
+          );
+        });
+        $(document).mouseup(function (e) {
+          if (
+            !slidingDiv.is(e.target) &&
+            slidingDiv.has(e.target).length === 0 &&
+            slidingDiv.hasClass("open")
+          ) {
+            slidingDiv.removeClass("open").animate(
+              {
+                marginLeft: -slidingDiv.outerWidth(),
+              },
+              500
+            );
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
